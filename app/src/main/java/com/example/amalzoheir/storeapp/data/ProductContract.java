@@ -21,7 +21,7 @@ public static final class ProductEntry implements BaseColumns{
             ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_Product;
     public final static String TABLE_NAME="Product";
     public final static String _ID= BaseColumns._ID;
-    public final static String COLUMN_PRODUCT_NAME="price";
+    public final static String COLUMN_PRODUCT_NAME="name";
     public final static String COLUMN_PRODUCT_PRICE="price";
     public final static String COLUMN_PRODUCT_QUANTITY="quantity";
     public final static String COLUMN_PRODUCT_SUPPLIER="supplier";
