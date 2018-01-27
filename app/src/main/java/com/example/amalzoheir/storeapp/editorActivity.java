@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.amalzoheir.storeapp.data.ProductContract;
 
 public class editorActivity extends AppCompatActivity {
+    EditText nameText;
     EditText priceText;
     EditText quantityText;
     EditText supplierText;
@@ -21,6 +22,7 @@ public class editorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        nameText=(EditText)findViewById(R.id.name);
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
@@ -33,6 +35,7 @@ public class editorActivity extends AppCompatActivity {
         });
     }
     private void savePet() {
+        String nameString= nameText.getText().toString().trim();
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
@@ -46,7 +49,8 @@ public class editorActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(priceString)) {
             quantity= Integer.parseInt(quantityString);
         }
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PEICE, price);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, nameString);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");

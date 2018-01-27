@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-displayDatabaseInfo();
+        displayDatabaseInfo();
     }
     private void displayDatabaseInfo() {
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
@@ -45,14 +45,14 @@ displayDatabaseInfo();
        ProductDbHelper mDbHelper = new ProductDbHelper(this);
 
         // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Perform this raw SQL query "SELECT * FROM pets"
         // to get a Cursor that contains all rows from the pets table.
 
         String []projection={
                 ProductContract.ProductEntry._ID,
-                ProductContract.ProductEntry.COLUMN_PRODUCT_PEICE,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER
 
@@ -65,7 +65,8 @@ displayDatabaseInfo();
     }
     private void insertPet(){
         ContentValues contentValues=new ContentValues();
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PEICE, 6);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, "book");
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 6);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, 7);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, "AMC");
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
