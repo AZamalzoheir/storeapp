@@ -69,7 +69,7 @@ public class ProductProvider extends ContentProvider {
         }
     }
     private  Uri insertPet(Uri uri,ContentValues contentValues){
-        Integer price = contentValues.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PEICE);
+        Integer price = contentValues.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
         if (price == null) {
             throw new IllegalArgumentException("product requires a rice");
         }
