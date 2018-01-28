@@ -4,5 +4,10 @@
     <string name="editor_insert_product_successful">insert product successful</string>
     <string name="action_save">save</string>
     <string name="action_delete">delete</string>
-
+    <string name="editor_activity_title_new_product">new product</string>
+    <string name="editor_activity_title_edit_product">edit product</string>
+    <string name="editor_delete_product_failed">delete product field</string>
+    <string name="editor_delete_product_successful">delete product successful</string>
+    <string name="editor_update_product_failed">update product failed</string>
+    <string name="editor_update_product_successful">update product successful</string>
 </resources>

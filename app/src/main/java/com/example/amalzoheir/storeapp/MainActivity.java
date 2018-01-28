@@ -1,5 +1,6 @@
 package com.example.amalzoheir.storeapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import com.example.amalzoheir.storeapp.data.ProductContract;
@@ -32,6 +34,15 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
         ListView lViewItem=(ListView)findViewById(R.id.list);
         mCursorAdapter=new ProductCursorAdapter(this,null);
         lViewItem.setAdapter(mCursorAdapter);
+        lViewItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this,editorActivity.class);
+                Uri currentPetUri= ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id);
+                intent.setData(currentPetUri);
+                startActivity(intent);
+            }
+        });
         getLoaderManager().initLoader(PRODUCT_LOADER,null,this);
     }
     private void insertProduct(){
@@ -43,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
         Uri newUri =getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI,contentValues);
     }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String []projection={
