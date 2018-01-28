@@ -10,4 +10,10 @@
     <string name="editor_delete_product_successful">delete product successful</string>
     <string name="editor_update_product_failed">update product failed</string>
     <string name="editor_update_product_successful">update product successful</string>
+    <string name="delete_dialog_msg">Delete this pet?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="unsaved_changes_dialog_msg">changes unsaved</string>
+    <string name="discard">discard</string>
+    <string name="keep_editing">keep editing</string>
 </resources>
