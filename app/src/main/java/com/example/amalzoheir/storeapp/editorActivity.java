@@ -26,6 +26,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
     EditText priceText;
     EditText quantityText;
     EditText supplierText;
+    EditText imageText;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -47,6 +48,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
+        imageText=(EditText)findViewById(R.id.product_image);
         if (mCurrentProductUri== null) {
             setTitle(getString(R.string.editor_activity_title_new_product));
             invalidateOptionsMenu();
@@ -58,13 +60,19 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         priceText.setOnTouchListener(mTouchListener);
         quantityText.setOnTouchListener(mTouchListener);
         supplierText.setOnTouchListener(mTouchListener);
-
+        imageText.setOnTouchListener(mTouchListener);
     }
     private void savePet() {
         String nameString= nameText.getText().toString().trim();
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
+        String imageString = imageText.getText().toString().trim();
+        if (mCurrentProductUri == null &&
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(quantityString) &&
+                TextUtils.isEmpty(supplierString) &&  TextUtils.isEmpty(priceString)&&TextUtils.isEmpty(imageString)){
+            return;
+        }
         ContentValues contentValues = new ContentValues();
 
         int price= 0;
@@ -79,7 +87,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,imageString);
         if (mCurrentProductUri == null) {
             Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, contentValues);
             if (newUri == null) {
