@@ -46,10 +46,10 @@ public class editorActivity extends AppCompatActivity {
             price = Integer.parseInt(priceString);
         }
         int quantity= 0;
-        if (!TextUtils.isEmpty(priceString)) {
+        if (!TextUtils.isEmpty(quantityString)) {
             quantity= Integer.parseInt(quantityString);
         }
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, nameString);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);

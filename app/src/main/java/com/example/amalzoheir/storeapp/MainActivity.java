@@ -2,6 +2,7 @@ package com.example.amalzoheir.storeapp;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -9,14 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.amalzoheir.storeapp.data.ProductContract;
 import com.example.amalzoheir.storeapp.data.ProductDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
     Button addProductButton;
     TextView text;
+    ProductCursorAdapter mCursorAdapter;
+    private static final int PRODUCT_LOADER=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertPet();
+                insertProduct();
 
             }
         });
@@ -37,18 +41,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        displayDatabaseInfo();
+        ListView lViewItem=(ListView)findViewById(R.id.list);
+        mCursorAdapter=new ProductCursorAdapter(this,null);
+        lViewItem.setAdapter(mCursorAdapter);
+        getLoaderManager().initLoader(PRODUCT_LOADER,null,this);
     }
-    private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-       ProductDbHelper mDbHelper = new ProductDbHelper(this);
+    private void insertProduct(){
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, "book");
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 6);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, 7);
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, "AMC");
+        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
+        Uri newUri =getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI,contentValues);
+    }
 
-        // Create and/or open a database to read from it
-
-        // Perform this raw SQL query "SELECT * FROM pets"
-        // to get a Cursor that contains all rows from the pets table.
-
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String []projection={
                 ProductContract.ProductEntry._ID,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
@@ -57,19 +66,22 @@ public class MainActivity extends AppCompatActivity {
                 ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER
 
         };
-       /*Cursor cursor=db.query(petContract.petEntry.TABLE_NAME,projection,null,null,null,null,null);*/
-        Cursor cursor=getContentResolver().query(ProductContract.ProductEntry.CONTENT_URI,projection,null,null,null);
-        if (cursor.moveToFirst()) // data?
-            text.setText(cursor.getString(cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER)));
+        return new android.content.CursorLoader(this,
+                ProductContract.ProductEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
 
     }
-    private void insertPet(){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, "book");
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 6);
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, 7);
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, "AMC");
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
-        Uri newUri =getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI,contentValues);
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 }
