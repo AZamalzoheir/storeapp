@@ -2,5 +2,7 @@
     <string name="app_name">store app</string>
     <string name="editor_insert_product_failed">insert product failed</string>
     <string name="editor_insert_product_successful">insert product successful</string>
+    <string name="action_save">save</string>
+    <string name="action_delete">delete</string>
 
 </resources>

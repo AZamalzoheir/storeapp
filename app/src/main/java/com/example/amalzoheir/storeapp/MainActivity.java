@@ -4,36 +4,23 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.example.amalzoheir.storeapp.data.ProductContract;
-import com.example.amalzoheir.storeapp.data.ProductDbHelper;
-
 public class MainActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
-    Button addProductButton;
-    TextView text;
+
+    ImageButton addProductButton;
     ProductCursorAdapter mCursorAdapter;
     private static final int PRODUCT_LOADER=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text=(TextView)findViewById(R.id.product);
-        text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                insertProduct();
-
-            }
-        });
-        addProductButton=(Button)findViewById(R.id.add_product);
+        addProductButton=(ImageButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
                 startActivity(intent);
             }
         });
+
         ListView lViewItem=(ListView)findViewById(R.id.list);
         mCursorAdapter=new ProductCursorAdapter(this,null);
         lViewItem.setAdapter(mCursorAdapter);

@@ -1,10 +1,14 @@
 package com.example.amalzoheir.storeapp;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +21,6 @@ public class editorActivity extends AppCompatActivity {
     EditText priceText;
     EditText quantityText;
     EditText supplierText;
-    Button addProduct;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +29,6 @@ public class editorActivity extends AppCompatActivity {
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
-        addProduct=(Button)findViewById(R.id.add_product_in_store);
-        addProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                savePet();
-            }
-        });
     }
     private void savePet() {
         String nameString= nameText.getText().toString().trim();
@@ -66,6 +62,36 @@ public class editorActivity extends AppCompatActivity {
             }
         }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_editor, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to a click on the "Save" menu option
+            case R.id.action_save:
+                savePet();
+                finish();
+                return true;
+            // Respond to a click on the "Delete" menu option
+            case R.id.action_delete:
+                return true;
+            // Respond to a click on the "Up" arrow button in the app bar
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // If this is a new pet, hide the "Delete" menu item.
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+            menuItem.setVisible(false);
+        return true;
+    }
+}
 
 
