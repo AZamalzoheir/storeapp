@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import com.example.amalzoheir.storeapp.data.ProductContract;
 public class MainActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
-
     ImageButton addProductButton;
     ProductCursorAdapter mCursorAdapter;
     private static final int PRODUCT_LOADER=0;

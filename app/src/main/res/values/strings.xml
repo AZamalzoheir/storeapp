@@ -16,4 +16,5 @@
     <string name="unsaved_changes_dialog_msg">changes unsaved</string>
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
+    <string name="values_missing">some values missing</string>
 </resources>
