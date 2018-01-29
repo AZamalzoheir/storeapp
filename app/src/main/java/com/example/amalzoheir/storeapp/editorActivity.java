@@ -10,7 +10,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -100,22 +99,18 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
             if (mCurrentProductUri == null) {
                 Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, contentValues);
                 if (newUri == null) {
-                    // If the new content URI is null, then there was an error with insertion.
                     Toast.makeText(this, getString(R.string.editor_insert_product_failed),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    // Otherwise, the insertion was successful and we can display a toast.
                     Toast.makeText(this, getString(R.string.editor_insert_product_successful),
                             Toast.LENGTH_SHORT).show();
                 }
             } else {
                 int rowsAffected = getContentResolver().update(mCurrentProductUri, contentValues, null, null);
                 if (rowsAffected == 0) {
-                    // If no rows were affected, then there was an error with the update.
                     Toast.makeText(this, getString(R.string.editor_update_product_failed),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    // Otherwise, the update was successful and we can display a toast.
                     Toast.makeText(this, getString(R.string.editor_update_product_successful),
                             Toast.LENGTH_SHORT).show();
                 }

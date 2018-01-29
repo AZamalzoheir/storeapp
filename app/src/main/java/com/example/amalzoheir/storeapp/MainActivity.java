@@ -1,5 +1,4 @@
 package com.example.amalzoheir.storeapp;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -45,15 +44,6 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
             }
         });
         getLoaderManager().initLoader(PRODUCT_LOADER,null,this);
-    }
-    private void insertProduct(){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, "book");
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 6);
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, 7);
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, "AMC");
-        contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,"");
-        Uri newUri =getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI,contentValues);
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
