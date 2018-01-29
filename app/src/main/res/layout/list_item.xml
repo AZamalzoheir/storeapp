@@ -20,6 +20,14 @@
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"  />
+    <Button
+        android:focusable="false"
+        android:id="@+id/reduce_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sale"
+        android:layout_marginLeft="@dimen/button_reduce"
+        />
 </LinearLayout>
     <TextView
         android:id="@+id/product_price"

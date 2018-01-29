@@ -17,4 +17,5 @@
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
     <string name="values_missing">some values missing</string>
+    <string name="empty_view_title_text">No product yet Add new product</string>
 </resources>

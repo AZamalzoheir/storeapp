@@ -32,13 +32,15 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
 
         ListView lViewItem=(ListView)findViewById(R.id.list);
         mCursorAdapter=new ProductCursorAdapter(this,null);
+        View emptyView = findViewById(R.id.empty_view);
+        lViewItem.setEmptyView(emptyView);
         lViewItem.setAdapter(mCursorAdapter);
         lViewItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this,editorActivity.class);
-                Uri currentPetUri= ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id);
-                intent.setData(currentPetUri);
+                Uri currentProductUri= ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI,id);
+                intent.setData(currentProductUri);
                 startActivity(intent);
             }
         });

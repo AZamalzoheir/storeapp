@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
     EditText quantityText;
     EditText supplierText;
     EditText imageText;
+    Button   orderButton;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -48,6 +50,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
         imageText=(EditText)findViewById(R.id.product_image);
+        orderButton=(Button)findViewById(R.id.order_button);
         if (mCurrentProductUri== null) {
             setTitle(getString(R.string.editor_activity_title_new_product));
             invalidateOptionsMenu();
@@ -55,11 +58,26 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
             setTitle(getString(R.string.editor_activity_title_edit_product));
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
+        orderButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL,"supplier"+supplierText.getText().toString());
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Product information");
+                intent.putExtra(Intent.EXTRA_TEXT,"name"+nameText.getText().toString()+
+                        " price"+priceText.getText().toString()+
+                        " quantity"+quantityText.getText().toString()
+                );
+                startActivity(Intent.createChooser(intent, "Send Email"));
+            }
+        });
         nameText.setOnTouchListener(mTouchListener);
         priceText.setOnTouchListener(mTouchListener);
         quantityText.setOnTouchListener(mTouchListener);
         supplierText.setOnTouchListener(mTouchListener);
         imageText.setOnTouchListener(mTouchListener);
+
     }
     private void saveProduct() {
         String nameString= nameText.getText().toString().trim();
