@@ -1,11 +1,18 @@
 package com.example.amalzoheir.storeapp;
 
+import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +23,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.amalzoheir.storeapp.data.ProductContract;
 
-public class editorActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
+import java.io.File;
+
+public class editorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     EditText nameText;
     EditText priceText;
     EditText quantityText;
     EditText supplierText;
     EditText imageText;
     Button   orderButton;
+    Button selectButton;
+    ImageView productImageImageView;
+    String realPath;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -48,8 +61,11 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
-        imageText=(EditText)findViewById(R.id.product_image);
+        imageText=(EditText)findViewById(R.id.product_image_path);
         orderButton=(Button)findViewById(R.id.order_button);
+        selectButton=(Button)findViewById(R.id.select_image_button);
+        productImageImageView=(ImageView)findViewById(R.id.product_image_view);
+        selectButton.setOnClickListener(this);
         if (mCurrentProductUri== null) {
             setTitle(getString(R.string.editor_activity_title_new_product));
             invalidateOptionsMenu();
@@ -83,19 +99,14 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
-        String imageString = imageText.getText().toString().trim();
-        if(!nameString.isEmpty()&&!quantityString.isEmpty()&&
-        !priceString.isEmpty()&&!supplierString.isEmpty()&&
-                !imageString.isEmpty()) {
             ContentValues contentValues = new ContentValues();
                 int price = Integer.parseInt(priceString);
            int  quantity = Integer.parseInt(quantityString);
-
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
-            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE, imageString);
+            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,realPath);
             if (mCurrentProductUri == null) {
                 Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, contentValues);
                 if (newUri == null) {
@@ -115,12 +126,7 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
                             Toast.LENGTH_SHORT).show();
                 }
             }
-        }
-        else
-        {
-            Toast.makeText(this, getString(R.string.values_missing),
-                    Toast.LENGTH_SHORT).show();
-        }
+
     }
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -239,14 +245,18 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
             int priceColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
             int supplierColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER);
+            int iamgeColumnIndex=cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE);
             String name = cursor.getString(nameColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
+            String imagePath = cursor.getString(iamgeColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             nameText.setText(name);
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
+            Uri imageUri = Uri.parse(imagePath);
+            productImageImageView.setImageURI(imageUri);
         }
     }
 
@@ -254,6 +264,22 @@ public class editorActivity extends AppCompatActivity implements android.app.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+    @Override
+    public void onClick(View v) {
+            Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode== Activity.RESULT_OK&&data!=null){
+            Uri selectedImageUri=data.getData();
+            realPath=selectedImageUri.toString();
+            Uri imageUri = Uri.parse(realPath);
+           productImageImageView.setImageURI(imageUri);
+        }
+    }
+
 }
-
-
