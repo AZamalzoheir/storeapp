@@ -39,7 +39,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     Button   orderButton;
     Button selectButton;
     ImageView productImageImageView;
-    String realPath;
+    String imagePath;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -106,7 +106,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
-            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,realPath);
+            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,imagePath);
             if (mCurrentProductUri == null) {
                 Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, contentValues);
                 if (newUri == null) {
@@ -248,19 +248,15 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             int iamgeColumnIndex=cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE);
             String name = cursor.getString(nameColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
-            String imagePath = cursor.getString(iamgeColumnIndex);
+            String realImagePath = cursor.getString(iamgeColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             nameText.setText(name);
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
-            File imgFile = new  File(imagePath);
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                productImageImageView.setImageBitmap(myBitmap);
-            }
-
+           imageText.setText(realImagePath);
+            productImageImageView.setImageURI(Uri.parse(realImagePath));
         }
     }
 
@@ -280,27 +276,12 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK&&data!=null){
             Uri selectedImageUri=data.getData();
-            String imagePath=getRealPathFromURI(selectedImageUri);
-           imageText.setText(imagePath);
-
-
+            imagePath=selectedImageUri.toString();
+            productImageImageView.setImageURI(Uri.parse(imagePath));
         }
     }
-    public String getRealPathFromURI(Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+
     }
 
 
 
-}
