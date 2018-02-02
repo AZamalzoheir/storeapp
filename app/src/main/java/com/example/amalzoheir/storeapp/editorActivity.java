@@ -38,8 +38,11 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     EditText imageText;
     Button   orderButton;
     Button selectButton;
+    Button increaseQuantityButton;
+    Button decreaseQuantityButton;
     ImageView productImageImageView;
     String imagePath;
+    int quantity;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -64,6 +67,8 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         imageText=(EditText)findViewById(R.id.product_image_path);
         orderButton=(Button)findViewById(R.id.order_button);
         selectButton=(Button)findViewById(R.id.select_image_button);
+        increaseQuantityButton=(Button)findViewById(R.id.increase_quantity_button);
+        decreaseQuantityButton=(Button)findViewById(R.id.decrease_quantity_button);
         productImageImageView=(ImageView)findViewById(R.id.product_image_view);
         selectButton.setOnClickListener(this);
         if (mCurrentProductUri== null) {
@@ -73,6 +78,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             setTitle(getString(R.string.editor_activity_title_edit_product));
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
+
         orderButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -86,6 +92,20 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                 );
                 startActivity(Intent.createChooser(intent,"Send Email"));
             }
+
+        });
+        increaseQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                quantityText.setText(Integer.toString(quantity++));
+            }
+        });
+        decreaseQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(quantity>0)
+                    quantityText.setText(Integer.toString(quantity--));
+            }
         });
         nameText.setOnTouchListener(mTouchListener);
         priceText.setOnTouchListener(mTouchListener);
@@ -95,18 +115,24 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
 
     }
     private void saveProduct() {
+
+
         String nameString= nameText.getText().toString().trim();
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
+        if(nameString==""||priceString==""||quantityString==""||supplierString==""){
+            return;
+        }
+        else {
             ContentValues contentValues = new ContentValues();
             int price = Integer.parseInt(priceString);
-            int  quantity = Integer.parseInt(quantityString);
+            int quantity = Integer.parseInt(quantityString);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
-            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE,imagePath);
+            contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE, imagePath);
             if (mCurrentProductUri == null) {
                 Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, contentValues);
                 if (newUri == null) {
@@ -128,7 +154,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.LENGTH_SHORT).show();
                 }
             }
-
+        }
     }
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -252,7 +278,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             String supplier = cursor.getString(supplierColumnIndex);
            String realImagePath = cursor.getString(iamgeColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
-            int quantity = cursor.getInt(quantityColumnIndex);
+            quantity = cursor.getInt(quantityColumnIndex);
             nameText.setText(name);
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));

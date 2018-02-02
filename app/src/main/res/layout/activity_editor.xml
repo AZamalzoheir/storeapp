@@ -128,11 +128,11 @@
             android:id="@+id/decrease_quantity_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Decrease Quantity"/>
+            android:text="Decrease"/>
         <Button
             android:id="@+id/increase_quantity_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Increase Quantity"/>
+            android:text="Increase"/>
     </LinearLayout>
 </LinearLayout>
