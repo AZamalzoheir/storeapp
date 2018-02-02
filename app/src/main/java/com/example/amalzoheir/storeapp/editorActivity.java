@@ -226,8 +226,8 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                 ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
-                ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER
-
+                ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE
         };
         return new android.content.CursorLoader(this,
                 mCurrentProductUri,
@@ -255,8 +255,12 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
-            Uri imageUri = Uri.parse(imagePath);
-            productImageImageView.setImageURI(imageUri);
+            File imgFile = new  File(imagePath);
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                productImageImageView.setImageBitmap(myBitmap);
+            }
+
         }
     }
 
@@ -276,10 +280,27 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK&&data!=null){
             Uri selectedImageUri=data.getData();
-            realPath=selectedImageUri.toString();
-            Uri imageUri = Uri.parse(realPath);
-           productImageImageView.setImageURI(imageUri);
+            String imagePath=getRealPathFromURI(selectedImageUri);
+           imageText.setText(imagePath);
+
+
         }
     }
+    public String getRealPathFromURI(Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+
 
 }

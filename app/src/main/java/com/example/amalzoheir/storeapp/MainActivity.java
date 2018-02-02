@@ -47,13 +47,13 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String []projection={
+        String[] projection = {
                 ProductContract.ProductEntry._ID,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
-                ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER
-
+                ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE
         };
         return new android.content.CursorLoader(this,
                 ProductContract.ProductEntry.CONTENT_URI,
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
                 null);
 
     }
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mCursorAdapter.swapCursor(cursor);
