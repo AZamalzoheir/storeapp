@@ -152,12 +152,7 @@ public class ProductProvider extends ContentProvider {
             if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("product requires valid quantity");
             }
-        }
-        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE)) {
-            String image= values.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE);
-            if (image!= null) {
-                throw new IllegalArgumentException("product requires valid image");
-            }
+
         }
         if (values.size() == 0) {
             return 0;

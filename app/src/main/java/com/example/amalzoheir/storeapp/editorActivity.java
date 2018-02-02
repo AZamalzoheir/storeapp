@@ -84,7 +84,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                         " price"+priceText.getText().toString()+
                         " quantity"+quantityText.getText().toString()
                 );
-                startActivity(Intent.createChooser(intent, "Send Email"));
+                startActivity(Intent.createChooser(intent,"Send Email"));
             }
         });
         nameText.setOnTouchListener(mTouchListener);
@@ -100,8 +100,8 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
             ContentValues contentValues = new ContentValues();
-                int price = Integer.parseInt(priceString);
-           int  quantity = Integer.parseInt(quantityString);
+            int price = Integer.parseInt(priceString);
+            int  quantity = Integer.parseInt(quantityString);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
             contentValues.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
@@ -117,7 +117,9 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.LENGTH_SHORT).show();
                 }
             } else {
+
                 int rowsAffected = getContentResolver().update(mCurrentProductUri, contentValues, null, null);
+
                 if (rowsAffected == 0) {
                     Toast.makeText(this, getString(R.string.editor_update_product_failed),
                             Toast.LENGTH_SHORT).show();
@@ -255,7 +257,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
-            imageText.setText(realImagePath);
+            productImageImageView.setImageURI(Uri.parse(realImagePath));
         }
     }
 
