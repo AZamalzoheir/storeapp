@@ -248,15 +248,14 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             int iamgeColumnIndex=cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PICTURE);
             String name = cursor.getString(nameColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
-            String realImagePath = cursor.getString(iamgeColumnIndex);
+           String realImagePath = cursor.getString(iamgeColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             nameText.setText(name);
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
-           imageText.setText(realImagePath);
-            productImageImageView.setImageURI(Uri.parse(realImagePath));
+            imageText.setText(realImagePath);
         }
     }
 
@@ -274,6 +273,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        imagePath="";
         if(resultCode== Activity.RESULT_OK&&data!=null){
             Uri selectedImageUri=data.getData();
             imagePath=selectedImageUri.toString();
