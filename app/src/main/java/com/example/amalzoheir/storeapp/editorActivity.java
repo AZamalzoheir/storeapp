@@ -121,10 +121,6 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
-        if(nameString==""||priceString==""||quantityString==""||supplierString==""){
-            return;
-        }
-        else {
             ContentValues contentValues = new ContentValues();
             int price = Integer.parseInt(priceString);
             int quantity = Integer.parseInt(quantityString);
@@ -154,7 +150,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.LENGTH_SHORT).show();
                 }
             }
-        }
+
     }
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
