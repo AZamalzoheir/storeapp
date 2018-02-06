@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
@@ -31,6 +32,7 @@ import com.example.amalzoheir.storeapp.data.ProductContract;
 import java.io.File;
 
 public class editorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+    private static final int TAKE_PICTURE =1 ;
     EditText nameText;
     EditText priceText;
     EditText quantityText;
@@ -43,6 +45,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     ImageView productImageImageView;
     String imagePath;
     int quantity;
+    private Uri imageUri;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -279,7 +282,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
             supplierText.setText(supplier);
             priceText.setText(Integer.toString(price));
             quantityText.setText(Integer.toString(quantity));
-            productImageImageView.setImageURI(Uri.parse(realImagePath));
+            //productImageImageView.setImageURI(Uri.parse(realImagePath));
         }
     }
 
@@ -290,21 +293,59 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onClick(View v) {
-            Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, 0);
+            selectImage();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         imagePath="";
         if(resultCode== Activity.RESULT_OK&&data!=null){
-            Uri selectedImageUri=data.getData();
-            imagePath=selectedImageUri.toString();
-            productImageImageView.setImageURI(Uri.parse(imagePath));
+            if(requestCode==1){
+                Uri selectedImageUri = imageUri;
+                imagePath = selectedImageUri.toString();
+                productImageImageView.setImageURI(Uri.parse(imagePath));
+            }
+            /* else {
+                Uri selectedImageUri = data.getData();
+                imagePath = selectedImageUri.toString();
+                productImageImageView.setImageURI(Uri.parse(imagePath));
+            }*/
         }
     }
-
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(editorActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                        cameraIntent();
+                } else if (items[item].equals("Choose from Library")) {
+                        galleryIntent();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+    private void cameraIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+    private void galleryIntent()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),0);
+    }
     }
 
 
