@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -305,11 +306,11 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                 imagePath = selectedImageUri.toString();
                 productImageImageView.setImageURI(Uri.parse(imagePath));
             }
-            /* else {
+             else {
                 Uri selectedImageUri = data.getData();
                 imagePath = selectedImageUri.toString();
                 productImageImageView.setImageURI(Uri.parse(imagePath));
-            }*/
+            }
         }
     }
     private void selectImage() {
@@ -332,12 +333,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         builder.show();
     }
     private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, TAKE_PICTURE);
+
     }
     private void galleryIntent()
     {
