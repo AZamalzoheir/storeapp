@@ -39,7 +39,6 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     EditText priceText;
     EditText quantityText;
     EditText supplierText;
-    EditText imageText;
     Button   orderButton;
     Button selectButton;
     Button increaseQuantityButton;
@@ -47,7 +46,6 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     ImageView productImageImageView;
     String imagePath;
     int quantity;
-    private Uri imageUri;
     private boolean mProductHasChanged = false;
     private Uri mCurrentProductUri;
     public static final int EXISTING_PRODUCT_LOADER = 0;
@@ -69,7 +67,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
-        imageText=(EditText)findViewById(R.id.product_image_path);
+
         orderButton=(Button)findViewById(R.id.order_button);
         selectButton=(Button)findViewById(R.id.select_image_button);
         increaseQuantityButton=(Button)findViewById(R.id.increase_quantity_button);
@@ -116,7 +114,6 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         priceText.setOnTouchListener(mTouchListener);
         quantityText.setOnTouchListener(mTouchListener);
         supplierText.setOnTouchListener(mTouchListener);
-        imageText.setOnTouchListener(mTouchListener);
 
     }
     private void saveProduct() {
@@ -126,6 +123,11 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
+        if(nameString.length()==0||priceString.length()==0||quantityString.length()==0||supplierString.length()==0){
+            Toast.makeText(this,"data is empty",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
             ContentValues contentValues = new ContentValues();
             int price = Integer.parseInt(priceString);
             int quantity = Integer.parseInt(quantityString);
@@ -155,7 +157,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.LENGTH_SHORT).show();
                 }
             }
-
+        }
     }
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
