@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -33,7 +34,7 @@ import com.example.amalzoheir.storeapp.data.ProductContract;
 import java.io.File;
 
 public class editorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
-    private static final int TAKE_PICTURE =1 ;
+    private static final int CAM_REQUEST =1 ;
     EditText nameText;
     EditText priceText;
     EditText quantityText;
@@ -300,11 +301,10 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         imagePath="";
-        if(resultCode== Activity.RESULT_OK&&data!=null){
+        String imagePathCamera="store/camera/store_img.jpg";
+        if(resultCode== Activity.RESULT_OK){
             if(requestCode==1){
-                Uri selectedImageUri = imageUri;
-                imagePath = selectedImageUri.toString();
-                productImageImageView.setImageURI(Uri.parse(imagePath));
+                productImageImageView.setImageURI(Uri.parse(imagePathCamera));
             }
              else {
                 Uri selectedImageUri = data.getData();
@@ -333,7 +333,18 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         builder.show();
     }
     private void cameraIntent() {
-
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file=getFile();
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,file);
+        startActivityForResult(cameraIntent,CAM_REQUEST);
+    }
+    private  File getFile(){
+        File folder=new File("store/camera");
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+        File imageFile=new File(folder,"store_img.jpg");
+        return imageFile;
     }
     private void galleryIntent()
     {
