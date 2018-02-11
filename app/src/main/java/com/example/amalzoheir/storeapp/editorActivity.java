@@ -67,7 +67,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         priceText=(EditText)findViewById(R.id.price);
         quantityText=(EditText)findViewById(R.id.quantity);
         supplierText=(EditText)findViewById(R.id.supplier);
-
+        imagePath="";
         orderButton=(Button)findViewById(R.id.order_button);
         selectButton=(Button)findViewById(R.id.select_image_button);
         increaseQuantityButton=(Button)findViewById(R.id.increase_quantity_button);
@@ -123,7 +123,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
         String priceString= priceText.getText().toString().trim();
         String quantityString = quantityText.getText().toString().trim();
         String supplierString = supplierText.getText().toString().trim();
-        if(nameString.length()==0||priceString.length()==0||quantityString.length()==0||supplierString.length()==0){
+        if((nameString.length()==0||priceString.length()==0||quantityString.length()==0||supplierString.length()==0||imagePath.length()==0)&&mCurrentProductUri == null){
             Toast.makeText(this,"data is empty",
                     Toast.LENGTH_SHORT).show();
         }
@@ -302,7 +302,7 @@ public class editorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        imagePath="";
+
         String imagePathCamera="store/camera/store_img.jpg";
         if(resultCode== Activity.RESULT_OK){
             if(requestCode==1){
